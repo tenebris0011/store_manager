@@ -1,0 +1,106 @@
+{% extends "core/base.html" %}
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+{% endblock scripts %}
+{% block content %}
+<div class="container table-responsive">
+    <h3>Store Credits</h3>
+    <table id="creditTable" class="table table-fluid" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="th-sm">First Name</th>
+                <th class="th-sm">Last Name</th>
+                <th class="th-sm">Email</th>
+                <th class="th-sm">Phone Number</th>
+                <th class="th-sm">Amount</th>
+                <th class="th-sm">Added By</th>
+            </tr>
+        </thead>
+        {% for item in store_credit %}
+        <tr class="custom-clickable-row" id="{{ item.id }}">
+            <td id="{{ item.id }}_first_name">{{ item.first_name }}</td>
+            <td id="{{ item.id }}_last_name">{{ item.last_name }}</td>
+            <td id="{{ item.id }}_email">{{ item.email }}</td>
+            <td id="{{ item.id }}_phone_number">{{ item.phone_number }}</td>
+            <td id="{{ item.id }}_amount">{{ item.amount }}</td>
+            <td id="{{ item.id }}_added_by">{{ item.added_by }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Store Credit</h4>
+                <button class="close" type="button" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="popup">
+                    <form method="post" class="form-container" id="form">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary mb-2" type="submit">Submit</button>
+                        <button class="btn btn-primary mb-2" type="submit" name="delete" value="delete">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block footer %}
+<script>
+    $(document).ready(function () {
+        $('#creditTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'Add Item',
+                    attr: {
+                        'type': 'button',
+                        'data-toggle': 'modal',
+                        'data-target': '#myModal',
+                        'tabindex': '-1',
+                        'id': 'addItem',
+                    }
+                },
+                'copy', 'csv', 'print'
+            ]
+        });
+    });
+    $(document).on('click', '.custom-clickable-row', function (e) {
+        $('#id_first_name').val('');
+        $('#id_last_name').val('');
+        $('#id_email').val('');
+        $('#id_phone_number').val('');
+        $('#id_amount').val('');
+        $('#id_added_by').val('');
+        $('#id_id').val('');
+        let row_id = $(this).attr("id");
+        $('#id_id').val(row_id);
+        document.getElementById("addItem").click();
+        $(this).find('td').each(function () {
+            if ($(this).attr('id') === row_id + "_first_name") {
+                $('#id_first_name').val($(this).text());
+            } else if ($(this).attr('id') === row_id + "_last_name") {
+                $('#id_last_name').val($(this).text());
+            } else if ($(this).attr('id') === row_id + "_email") {
+                $('#id_email').val($(this).text());
+            } else if ($(this).attr('id') === row_id + "_phone_number") {
+                $('#id_phone_number').val($(this).text());
+            } else if ($(this).attr('id') === row_id + "_amount") {
+                $('#id_amount').val($(this).text());
+            } else if ($(this).attr('id') === row_id + "_added_by") {
+                $('#id_added_by').val($(this).text());
+            }
+        })
+    });
+</script>
+{% endblock footer %}

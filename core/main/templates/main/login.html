@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% if user.is_authenticated %}
+<script>window.location.replace("/inventory/new")</script>
+{% endif %}
+<!-- Login page credit https://codepen.io/colorlib/pen/rxddKy -->
+<center>
+    <div class="login-page">
+        <div class="form">
+          <form class="login-form" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <br>
+            <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+    </div>
+  </div>
+</center>
+{% endblock %}
