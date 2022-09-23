@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods
 
 # Create your views here.
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "GET"])
 def login_request(request):
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
