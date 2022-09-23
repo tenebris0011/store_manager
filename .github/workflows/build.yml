@@ -43,9 +43,3 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_USER }}/django-store-manager:latest
-      -
-        name: Deploy Updated Image
-        uses: joelwmale/webhook-action@2.1.0
-        with:
-        # The url to send the webhook event to
-          url: ${{ secrets.JENKINS_DEPLOY }}
