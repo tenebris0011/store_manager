@@ -3,8 +3,10 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
+@require_http_methods(["POST"])
 def login_request(request):
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
@@ -23,6 +25,7 @@ def login_request(request):
 	form = AuthenticationForm()
 	return render(request=request, template_name="main/login.html", context={"form":form})
 
+@require_http_methods(["GET", "POST"])
 def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.") 

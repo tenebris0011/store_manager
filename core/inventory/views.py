@@ -4,11 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from .models import NewInventory as NewInventoryModel
 from .models import SinglesInventory as SinglesInventoryModel
+from django.views.decorators.http import require_http_methods
 from .forms import *
 
 
 # Create your views here.
-
+@require_http_methods(["GET", "POST"])
 def NewInventory(request):
     if request.user.is_authenticated:
         if request.POST.get('delete'):
@@ -37,6 +38,7 @@ def NewInventory(request):
         return HttpResponse(template.render(context, request))
     return redirect("/")
 
+@require_http_methods(["GET", "POST"])
 def SinglesInventory(request):
     if request.user.is_authenticated:
         if request.POST.get('delete'):

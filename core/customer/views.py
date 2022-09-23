@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
-
+from django.views.decorators.http import require_http_methods
 from .forms import PreOrderForm, StoreCreditForm
 from .models import StoreCredit as StoreCreditModel
 from .models import PreOrder as PreOrderModel
 
+@require_http_methods(["GET", "POST"])
 def StoreCredit(request):
     if request.user.is_authenticated:
         if request.POST.get('delete'):
@@ -35,6 +36,7 @@ def StoreCredit(request):
         return HttpResponse(template.render(context, request))
     return HttpResponse("Please login.")
 
+@require_http_methods(["GET", "POST"])
 def PreOrders(request):
     if request.user.is_authenticated:
         if request.POST.get('delete'): 
