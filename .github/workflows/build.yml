@@ -1,7 +1,10 @@
-name: Build every Monday at 3AM.
+name: Build every Monday or on push to master.
 on:
   schedule:
     - cron: '0 3 * * 1'
+  push:
+     branches:
+      - master
 jobs:
   deploy:
     name: Docker Build, Push, and Deploy
